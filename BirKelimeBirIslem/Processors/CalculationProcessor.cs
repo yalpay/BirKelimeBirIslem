@@ -9,6 +9,10 @@ namespace BirKelimeBirIslemClassLibrary.Processors
 {
     public static class CalculationProcessor
     {        
+        /// <summary>
+        /// if the solution found, continue to the search within the rest of input,
+        /// 3, 40, 5, 24; 120  =>  3*40 = 120, continue to search 
+        /// </summary>
         private static bool solutionFound;       
         
         public static void Solve(Calculation calc)
@@ -34,7 +38,7 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                 }
             }           
 
-            if (solutionFound == false && calc.Input.Length > 2)
+            if (solutionFound == false)
             {
                 int[] newDizi = new int[calc.Input.Length - 1];
                 Process(calc, newDizi, "+");
@@ -48,10 +52,10 @@ namespace BirKelimeBirIslemClassLibrary.Processors
         {
             calc.CurrentSolution.Operations.Add(operation);
             calc.CurrentSolution.Process.Append($"\n{operation}\n{calc.Target}");
-            bool operatnComparison = !calc.AllSolution.Any(soln => soln.Operations.All(calc.CurrentSolution.Operations.Contains) &&
+            bool operatnComparison = !calc.AllSolutions.Any(soln => soln.Operations.All(calc.CurrentSolution.Operations.Contains) &&
                                                                    soln.Operations.Count == calc.CurrentSolution.Operations.Count);
             if (operatnComparison)
-                calc.AllSolution.Add(calc.CurrentSolution);
+                calc.AllSolutions.Add(calc.CurrentSolution);
             else
                 calc.CurrentSolution.SameWayDifferentElement = true;
                 
@@ -66,18 +70,23 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                     int mx = Math.Max(calc.Input[i], calc.Input[j]);
                     int mn = Math.Min(calc.Input[i], calc.Input[j]);
 
+                    // no need to subtract if the two elements are equal
                     bool illegalSubtract = mx == mn && operation == "-";
                     if (illegalSubtract)                    
                         continue;   
                     
+                    // no enhancement by multiplying an element with 1
                     bool illegalMultiply = mn == 1 && operation == "*";
                     if (illegalMultiply)
                         continue;
 
+                    // no enhancement by dividing an element to 1, division should be perfect
                     bool illegalDivide = operation == "/" && (mx % mn != 0 || mn == 1);
                     if (illegalDivide)
                         continue;
 
+                    // creating the array from existing input by making operation between input[i] and input[j] 
+                    // example: let input = 1, 2, 3, 4, 5;  i = 1; j = 3;  =>  newList would be: 1, 6, 3, 5 
                     int index = 0;
                     bool rightOfJ = false;
                     while (index < newList.Length)
@@ -107,6 +116,7 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                         index++;
                     }
 
+                    // add current operation to solution and continue to search recursively
                     string list = String.Join(", ", newList.OrderBy(x => x));
                     string process = $"{ mx } { operation} { mn }";
                     string soln = $"{calc.CurrentSolution.Process}\n{process}\n{list}\n";
@@ -119,10 +129,24 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                             Operations = calc.CurrentSolution.Operations.Union(new List<string> { process }).ToList(),
                             Process = new StringBuilder(soln)
                         },
-                        AllSolution = calc.AllSolution
+                        AllSolutions = calc.AllSolutions
                     });
                 }
             }
-        }        
+        }
+
+        public static Solution CraziestSolution(Calculation calc)
+        {            
+            if (calc.AllSolutions.Count == 0)
+            {
+                Console.WriteLine("No solution found to this problem!");
+                return null;
+            }
+
+            var solutions = calc.AllSolutions.SelectMany(soln => soln.Operations.Select(oprn =>
+            new { num = oprn.Substring(0, oprn.IndexOf(" ")), index = soln }));
+            var solutionWithMaxNumber = solutions.OrderByDescending(soln => soln.num).First().index;
+            return solutionWithMaxNumber;
+        }
     }
 }

@@ -11,13 +11,19 @@ namespace BirKelimeBirIslemClassLibrary.Generators
     {
         public static void PrintInput(Calculation calc)
         {
-            Console.WriteLine($"Input: {String.Join(", ", calc.Input)}");
+            Console.WriteLine($"\nInput: {String.Join(", ", calc.Input)}");
             Console.WriteLine($"Target: {calc.Target}");
         }
         public static void PrintSolutions(Calculation calc)
         {
-            calc.AllSolution.ForEach(solution => Console.WriteLine($"{solution.Process}\n\n---------------\n"));
-            Console.WriteLine($"Number of solutions: {calc.AllSolution.Count}");
+            calc.AllSolutions.ForEach(solution => Console.WriteLine($"{solution.Process}\n\n---------------\n"));
+            Console.WriteLine($"Number of solutions: {calc.AllSolutions.Count}");
+        }
+
+        public static void PrintSolution(Solution solution)
+        {
+            Console.WriteLine();
+            Console.WriteLine(solution.Process);
         }
     }
 }
