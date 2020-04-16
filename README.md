@@ -1,2 +1,2 @@
-# BirKelimeBirIslem
-Bir Kelime Bir İşlem Yarışması
+# Countdown Game
+Turkish version: Bir Kelime Bir İşlem Yarışması
