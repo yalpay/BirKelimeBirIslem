@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirKelimeBirIslem", "BirKelimeBirIslem\BirKelimeBirIslem.csproj", "{B29E2F80-7F78-436C-A4A2-E8D99DD51AC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CountdownLibrary", "BirKelimeBirIslem\CountdownLibrary.csproj", "{B29E2F80-7F78-436C-A4A2-E8D99DD51AC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeilmeTester", "KelimeTester\KeilmeTester.csproj", "{49B31B9F-7528-437C-9611-9335E94ADBA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordTester", "KelimeTester\WordTester.csproj", "{49B31B9F-7528-437C-9611-9335E94ADBA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IslemTester", "IslemTester\IslemTester.csproj", "{F942BA01-1DBA-45F0-A7C6-0C1823A632B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CountdownTester", "IslemTester\CountdownTester.csproj", "{F942BA01-1DBA-45F0-A7C6-0C1823A632B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

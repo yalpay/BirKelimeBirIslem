@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using BirKelimeBirIslem.Processors;
 using BirKelimeBirIslemClassLibrary.Classes;
 using BirKelimeBirIslemClassLibrary.Generators;
 using BirKelimeBirIslemClassLibrary.Processors;
@@ -15,34 +19,26 @@ namespace IslemTester
 
         public static void Calculate()
         {
-            var dt = DateTime.Now;
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            
             Calculation calc = CalculationGenerator.GenerateStandardIslem();
-
-            calc = new Calculation
-            {
-                Input = new int[] { 1, 2, 5, 7, 8, 75 },
-                Target = 954
-            };
-
-            //for (int i = 0; i < 20; i++)
+            //calc = new Calculation
             //{
-            //    dt = DateTime.Now;
-            //    calc = CalculationGenerator.GenerateStandardIslem();
-            //    Printers.PrintInput(calc);
-            //    CalculationProcessor.Solve(calc);
-            //    //Printers.PrintSolutions(calc);
-            //    Solution soln = CalculationProcessor.CraziestSolution(calc);
-            //    Printers.PrintSolution(soln);
-            //    Console.WriteLine((DateTime.Now - dt).TotalSeconds);
-            //}
-
-            Printers.PrintInput(calc);
+            //    Input = new int[] { 2, 8, 7, 5, 25, 10 },
+            //    Target = 777
+            //};
+           
+            //Printers.PrintSolution(solution);
+            //Printers.PrintInput(calc);
             CalculationProcessor.Solve(calc);
             Printers.PrintSolutions(calc);
-            //Solution solution = CalculationProcessor.CraziestSolution(calc);
+            //Solution solution = SolutionProcessor.CraziestSolution(calc);
             //Printers.PrintSolution(solution);
-            Console.WriteLine();
-            Console.WriteLine((DateTime.Now - dt).TotalSeconds);
+            //Console.WriteLine($"Target {calc.Target} have no solution!\n");        
+            stopWatch.Stop();
+            Console.WriteLine(stopWatch.Elapsed);
+            _ = calc;
         }
     }
 }

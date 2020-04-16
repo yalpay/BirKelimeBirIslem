@@ -8,18 +8,21 @@ using System.Threading.Tasks;
 namespace BirKelimeBirIslemClassLibrary.Processors
 {
     public static class CalculationProcessor
-    {        
-        /// <summary>
-        /// if the solution found, continue to the search within the rest of input,
-        /// 3, 40, 5, 24; 120  =>  3*40 = 120, continue to search 
-        /// </summary>
-        private static bool solutionFound;       
-        
+    {
+        //private static bool solutionFound;
+        //private static long counter = 0;        
         public static void Solve(Calculation calc)
         {
             if (calc.Input.Length == 1)
                 return;
 
+            CheckDirectSolution(calc);
+            var operations = new List<string>() { "+", "-", "*", "/" };
+            operations.ForEach(operation => Process(calc, operation));           
+
+        }
+        public static void CheckDirectSolution(Calculation calc)
+        {
             for (int j = 0; j < calc.Input.Length; j++)
             {
                 for (int i = j + 1; i < calc.Input.Length; i++)
@@ -34,19 +37,9 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                     if (mx * mn == calc.Target)
                         AddSolution(calc, $"{mx} * {mn}");
                     if (mx % mn == 0 && mx / mn == calc.Target)
-                        AddSolution(calc, $"{mx} / {mn}");                    
+                        AddSolution(calc, $"{mx} / {mn}");
                 }
-            }           
-
-            if (solutionFound == false)
-            {
-                int[] newDizi = new int[calc.Input.Length - 1];
-                Process(calc, newDizi, "+");
-                Process(calc, newDizi, "-");
-                Process(calc, newDizi, "*");
-                Process(calc, newDizi, "/");
             }
-            solutionFound = false;
         }
         private static void AddSolution(Calculation calc, string operation)
         {
@@ -56,13 +49,11 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                                                                    soln.Operations.Count == calc.CurrentSolution.Operations.Count);
             if (operatnComparison)
                 calc.AllSolutions.Add(calc.CurrentSolution);
-            else
-                calc.CurrentSolution.SameWayDifferentElement = true;
-                
-            solutionFound = true;
         }
-        private static void Process(Calculation calc, int[] newList, string operation)
+        private static void Process(Calculation calc, string operation)
         {
+            //counter++;
+            int[] newList = new int[calc.Input.Length - 1];
             for (int i = 0; i < calc.Input.Length; i++)
             {
                 for (int j = i + 1; j < calc.Input.Length; j++)
@@ -71,13 +62,13 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                     int mn = Math.Min(calc.Input[i], calc.Input[j]);
 
                     // no need to subtract if the two elements are equal
-                    bool illegalSubtract = mx == mn && operation == "-";
-                    if (illegalSubtract)                    
-                        continue;   
-                    
+                    bool unnecessarySubtract = mx == mn && operation == "-";
+                    if (unnecessarySubtract)
+                        continue;
+
                     // no enhancement by multiplying an element with 1
-                    bool illegalMultiply = mn == 1 && operation == "*";
-                    if (illegalMultiply)
+                    bool unnecessaryMultiply = mn == 1 && operation == "*";
+                    if (unnecessaryMultiply)
                         continue;
 
                     // no enhancement by dividing an element to 1, division should be perfect
@@ -94,16 +85,15 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                         if (rightOfJ == false)
                         {
                             if (index == i)
-                            {                               
+                            {
                                 if (operation == "+")
                                     newList[index] = mx + mn;
                                 if (operation == "-")
                                     newList[index] = mx - mn;
                                 if (operation == "*")
                                     newList[index] = mx * mn;
-                                if (operation == "/")
-                                    if (mn != 0 && mx % mn == 0)
-                                        newList[index] = mx / mn;
+                                if (operation == "/" && mx % mn == 0)
+                                    newList[index] = mx / mn;
                             }
                             else
                                 newList[index] = calc.Input[index];
@@ -125,7 +115,7 @@ namespace BirKelimeBirIslemClassLibrary.Processors
                         Input = newList,
                         Target = calc.Target,
                         CurrentSolution = new Solution()
-                        {                            
+                        {
                             Operations = calc.CurrentSolution.Operations.Union(new List<string> { process }).ToList(),
                             Process = new StringBuilder(soln)
                         },
@@ -135,18 +125,5 @@ namespace BirKelimeBirIslemClassLibrary.Processors
             }
         }
 
-        public static Solution CraziestSolution(Calculation calc)
-        {            
-            if (calc.AllSolutions.Count == 0)
-            {
-                Console.WriteLine("No solution found to this problem!");
-                return null;
-            }
-
-            var solutions = calc.AllSolutions.SelectMany(soln => soln.Operations.Select(oprn =>
-            new { num = oprn.Substring(0, oprn.IndexOf(" ")), index = soln }));
-            var solutionWithMaxNumber = solutions.OrderByDescending(soln => soln.num).First().index;
-            return solutionWithMaxNumber;
-        }
     }
 }

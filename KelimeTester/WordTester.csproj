@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BirKelimeBirIslem\BirKelimeBirIslem.csproj" />
+    <ProjectReference Include="..\BirKelimeBirIslem\CountdownLibrary.csproj" />
   </ItemGroup>
 
 </Project>
